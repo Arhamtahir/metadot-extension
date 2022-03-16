@@ -46,16 +46,6 @@ jobs:
       env:
         CI: false
   
-    - name: Checkout
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
-    - name: Release
-      uses: justincy/github-action-npm-release@2.0.1
-      id: release
-    - name: Print release output
-      if: ${{ steps.release.outputs.released == 'true' }}
-      run: echo Release ID ${{ steps.release.outputs.release_id }}
 
     - name: Build Extension for Firefox
       id: web-ext-build
