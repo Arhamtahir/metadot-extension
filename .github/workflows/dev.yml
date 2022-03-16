@@ -70,13 +70,23 @@ jobs:
         apiKey: ${{ secrets.FIREFOX_API_KEY }}
         apiSecret: ${{ secrets.FIREFOX_CLIENT_SECRET }}
         apiUrlPrefix: https://addons.mozilla.org/api/v5
-
+    
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Release
+      uses: justincy/github-action-npm-release@2.0.1
+      id: release
+    - name: Print release output
+      if: ${{ steps.release.outputs.released == 'true' }}
+      run: echo Release ID ${{ steps.release.outputs.release_id }}
 
   Chrome:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['12.x']
+        node-version: ['16.x']
 
 
     steps:
@@ -90,7 +100,7 @@ jobs:
 
       # Install project dependencies and build
     - name: Install dependencies
-      run: npm install
+      run: yarn install
       
 
     - name: Build the code
@@ -110,6 +120,16 @@ jobs:
         name: 'Chrome Artifacts'
         path: ./build/Package.zip
 
+    - name: Checkout
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Release
+      uses: justincy/github-action-npm-release@2.0.1
+      id: release
+    - name: Print release output
+      if: ${{ steps.release.outputs.released == 'true' }}
+      run: echo Release ID ${{ steps.release.outputs.release_id }}
     # - name: Publish to Chrome Webstore
     #   uses: mnao305/chrome-extension-upload@1.1.1
     #   with:
